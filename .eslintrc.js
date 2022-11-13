@@ -6,4 +6,5 @@ module.exports = {
   rules: {
     'react-native/no-inline-styles': 'off',
   },
+  parser: '@babel/eslint-parser',
 };
