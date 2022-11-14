@@ -37,9 +37,9 @@ const styles = StyleSheet.create({
   box: {
     height: 30,
     width: 30,
-    marginRight: 7,
+    marginRight: 14,
     // shadowColor: '#000',
-    // shadowOffset: { width: 0, height: 2 },
+    // shadowOffset: { width: 0, height: 1 },
     // shadowOpacity: 0.3,
     // shadowRadius: 1,
     // elevation: 10,
