@@ -30,7 +30,11 @@ export default function App() {
     <NavigationContainer linking={linking}>
       <Stack.Navigator>
         <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="ColorPalette" component={ColorPallete} />
+        <Stack.Screen
+          name="ColorPalette"
+          component={ColorPallete}
+          options={({ route }) => ({ title: route.params.title })}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

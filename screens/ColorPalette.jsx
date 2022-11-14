@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 
 import ColorTile from '../components/ColorTile';
+import ColorList from '../components/ColorList';
 
 const data = [
   { colorName: 'Base03', hexCode: '#002b36' },
@@ -30,26 +31,20 @@ const data = [
   { colorName: 'Green', hexCode: '#859900' },
 ];
 
-export default function ColorPallete() {
+export default function ColorPallete({ route }) {
+  const colors = route.params.colors;
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={[styles.container]}>
-        {/* <Text style={[styles.paddingOne, styles.redColor]}>Hello, World</Text> */}
-
         <View>
-          <Text style={{ fontWeight: 'bold', fontSize: 20 }}>
-            Here are some boxes with different colors
-          </Text>
+          {/* <Text style={{ fontWeight: 'bold', fontSize: 20 }}>{title}</Text> */}
           <FlatList
-            data={data}
+            data={colors}
             keyExtractor={item => item.hexCode}
             renderItem={({ item }) => (
               <ColorTile background={item.hexCode} text={item.colorName} />
             )}
           />
-          {/* {data.map(({ color, background }, index) => (
-          <ColorTile key={index} background={background} text={color} />
-        ))} */}
         </View>
       </View>
     </SafeAreaView>
