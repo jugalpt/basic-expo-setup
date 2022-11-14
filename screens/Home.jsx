@@ -5,7 +5,7 @@ import {
   ActivityIndicator,
   StyleSheet,
   Text,
-  RefreshControl,
+  TouchableOpacity,
 } from 'react-native';
 
 import ColorList from '../components/ColorList';
@@ -48,7 +48,7 @@ export default function Home({ navigation }) {
   }, [fetchPalletes]);
 
   const handlePress = (title, colors) => {
-    navigation.navigate('ColorPalette', {
+    navigation.navigate('color-pallete', {
       colors: colors,
       title: title,
     });
@@ -80,9 +80,6 @@ export default function Home({ navigation }) {
           keyExtractor={item => item.id}
           refreshing={state.status === 'LOADING'}
           onRefresh={() => fetchPalletes()}
-          // refreshControl={
-          //   <RefreshControl refreshing={true} onRefresh={() => {}} />
-          // }
           renderItem={({ item }) => (
             <ColorList
               title={item.paletteName}
@@ -90,6 +87,11 @@ export default function Home({ navigation }) {
               handlePress={handlePress}
             />
           )}
+          ListHeaderComponent={
+            <TouchableOpacity onPress={() => navigation.navigate('Modal')}>
+              <Text style={styles.addText}>Add Color Scheme</Text>
+            </TouchableOpacity>
+          }
         />
       ) : (
         <View style={[styles.container, styles.horizontal]}>
@@ -111,5 +113,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     padding: 10,
+  },
+  addText: {
+    fontWeight: 'bold',
+    color: 'white',
+    textAlign: 'center',
+    padding: 16,
+    backgroundColor: 'blue',
+    margin: 16,
   },
 });

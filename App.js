@@ -1,26 +1,41 @@
 import React from 'react';
-// import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import Home from './screens/Home';
 import ColorPallete from './screens/ColorPalette';
-import { createStackNavigator } from '@react-navigation/stack';
+import ColorPaletteModal from './screens/ColorPalleteModal';
 
-const Stack = createStackNavigator();
+const RootStack = createStackNavigator();
+const MainStack = createStackNavigator();
 
-// {
-//   /* <StatusBar style="auto" /> */
-// }
+function MainStackScreen() {
+  return (
+    <MainStack.Navigator>
+      <MainStack.Screen name="Home" component={Home} />
+      <MainStack.Screen
+        name="color-pallete"
+        component={ColorPallete}
+        options={({ route }) => ({ title: route.params.title })}
+      />
+    </MainStack.Navigator>
+  );
+}
 
 export default function App() {
   const linking = {
     config: {
       screens: {
-        Home: {
-          path: 'home',
+        Main: {
+          screens: {
+            Home: {
+              path: '',
+            },
+            Details: 'details',
+          },
         },
-        Details: {
-          path: 'details',
+        Modal: {
+          initialRouteName: '',
         },
       },
     },
@@ -28,14 +43,22 @@ export default function App() {
 
   return (
     <NavigationContainer linking={linking}>
-      <Stack.Navigator>
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen
-          name="ColorPalette"
-          component={ColorPallete}
-          options={({ route }) => ({ title: route.params.title })}
-        />
-      </Stack.Navigator>
+      <RootStack.Navigator>
+        <RootStack.Group>
+          <RootStack.Screen
+            name="Main"
+            component={MainStackScreen}
+            options={{ headerShown: false }}
+          />
+        </RootStack.Group>
+        <RootStack.Group screenOptions={{ presentation: 'modal' }}>
+          <RootStack.Screen
+            name="Modal"
+            component={ColorPaletteModal}
+            // options={{ headerShown: false }}
+          />
+        </RootStack.Group>
+      </RootStack.Navigator>
     </NavigationContainer>
   );
 }
