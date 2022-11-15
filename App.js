@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Home from './screens/Home';
 import ColorPallete from './screens/ColorPalette';
 import ColorPaletteModal from './screens/ColorPalleteModal';
+import { StateProvider } from './context/StateContext';
 
 const RootStack = createStackNavigator();
 const MainStack = createStackNavigator();
@@ -42,23 +43,25 @@ export default function App() {
   };
 
   return (
-    <NavigationContainer linking={linking}>
-      <RootStack.Navigator>
-        <RootStack.Group>
-          <RootStack.Screen
-            name="Main"
-            component={MainStackScreen}
-            options={{ headerShown: false }}
-          />
-        </RootStack.Group>
-        <RootStack.Group screenOptions={{ presentation: 'modal' }}>
-          <RootStack.Screen
-            name="Modal"
-            component={ColorPaletteModal}
-            // options={{ headerShown: false }}
-          />
-        </RootStack.Group>
-      </RootStack.Navigator>
-    </NavigationContainer>
+    <StateProvider>
+      <NavigationContainer linking={linking}>
+        <RootStack.Navigator>
+          <RootStack.Group>
+            <RootStack.Screen
+              name="Main"
+              component={MainStackScreen}
+              options={{ headerShown: false }}
+            />
+          </RootStack.Group>
+          <RootStack.Group screenOptions={{ presentation: 'modal' }}>
+            <RootStack.Screen
+              name="Modal"
+              component={ColorPaletteModal}
+              // options={{ headerShown: false }}
+            />
+          </RootStack.Group>
+        </RootStack.Navigator>
+      </NavigationContainer>
+    </StateProvider>
   );
 }

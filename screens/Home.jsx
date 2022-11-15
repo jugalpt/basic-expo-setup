@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React from 'react';
 import {
   View,
   FlatList,
@@ -10,51 +10,23 @@ import {
 
 import ColorList from '../components/ColorList';
 
-export default function Home({ navigation }) {
-  const [state, setState] = useState({ status: 'IDLE', data: [], error: null });
+import { useData } from '../context/StateContext';
 
-  const fetchPalletes = useCallback(async () => {
-    try {
-      setState(prev => ({ ...prev, status: 'LOADING' }));
+export default function Home({ navigation, route }) {
+  const { status, data, fetchPalletes } = useData();
+  const routeState = route.params;
 
-      const response = await fetch(
-        'https://color-palette-api.kadikraman.vercel.app/palettes',
-      );
-
-      if (response?.ok) {
-        const data = await response.json();
-
-        if (!data?.length) {
-          setState(prev => ({ ...prev, status: 'SUCCESS', data: [] }));
-          return;
-        }
-
-        setState(prev => ({ ...prev, status: 'SUCCESS', data }));
-        return;
-      }
-
-      throw new Error('something went wrong!');
-    } catch (error) {
-      setState(prev => ({
-        ...prev,
-        status: 'ERROR',
-        error: error?.message || 'Something went wrong!',
-      }));
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchPalletes();
-  }, [fetchPalletes]);
+  console.log({ routeState });
 
   const handlePress = (title, colors) => {
     navigation.navigate('color-pallete', {
       colors: colors,
       title: title,
+      other: JSON.stringify(colors),
     });
   };
 
-  if (state.status === 'LOADING' || state.status === 'IDLE') {
+  if (status === 'LOADING' || status === 'IDLE') {
     return (
       <View style={[styles.container, styles.horizontal]}>
         <ActivityIndicator size="large" color="#0000ff" />
@@ -62,7 +34,7 @@ export default function Home({ navigation }) {
     );
   }
 
-  if (state.status === 'ERROR') {
+  if (status === 'ERROR') {
     return (
       <View style={[styles.container, styles.horizontal]}>
         <Text style={{ color: 'red', alignSelf: 'center' }}>
@@ -72,13 +44,15 @@ export default function Home({ navigation }) {
     );
   }
 
+  console.log(data);
+
   return (
     <View style={{ flex: 1 }}>
-      {state.data.length ? (
+      {data.length ? (
         <FlatList
-          data={state.data}
+          data={data}
           keyExtractor={item => item.id}
-          refreshing={state.status === 'LOADING'}
+          refreshing={status === 'LOADING'}
           onRefresh={() => fetchPalletes()}
           renderItem={({ item }) => (
             <ColorList
@@ -88,7 +62,7 @@ export default function Home({ navigation }) {
             />
           )}
           ListHeaderComponent={
-            <TouchableOpacity onPress={() => navigation.navigate('Modal')}>
+            <TouchableOpacity onPress={() => navigation.navigate('Modal', {})}>
               <Text style={styles.addText}>Add Color Scheme</Text>
             </TouchableOpacity>
           }
